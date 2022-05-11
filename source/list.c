@@ -24,24 +24,6 @@ struct xtl_list_data
 
 
 
-// 克隆元素数据
-static void* xtl_list_node_data_clone(const void* _Element, xtl_size_t _Size)
-{
-	void*		data = x_posix_malloc(_Size);
-	if(data)
-	{
-		if(_Element == NULL)
-		{
-			x_posix_memset(data, 0, _Size);
-		}
-		else
-		{
-			x_posix_memcpy(data, _Element, _Size);
-		}
-	}
-	return data;
-}
-
 // 创建一个元素
 static xtl_list_node* xtl_list_node_emplace(void* _Element)
 {
@@ -58,7 +40,7 @@ static xtl_list_node* xtl_list_node_emplace(void* _Element)
 static xtl_list_node* xtl_list_node_new(const void* _Element, xtl_size_t _Size)
 {
 	xtl_list_node*		node = NULL;
-	void*			data = xtl_list_node_data_clone(_Element, _Size);
+	void*			data = xtl_allocator_data_clone(_Element, _Size);
 	if(data == NULL)
 	{
 		return NULL;
@@ -240,13 +222,13 @@ _XCCTLAPI_ bool __xcall__ xtl_list_resize(xtl_list_t _Object, xtl_size_t _Size)
 /// 在尾部追加一个元素
 _XCCTLAPI_ bool __xcall__ xtl_list_push_back(xtl_list_t _Object, const void* _Element)
 {
-	return xtl_list_emplace_back(_Object, xtl_list_node_data_clone(_Element, _Object->element_size));
+	return xtl_list_emplace_back(_Object, xtl_allocator_data_clone(_Element, _Object->element_size));
 }
 
 /// 在头部插入一个元素
 _XCCTLAPI_ bool __xcall__ xtl_list_push_front(xtl_list_t _Object, const void* _Element)
 {
-	return xtl_list_emplace_front(_Object, xtl_list_node_data_clone(_Element, _Object->element_size));
+	return xtl_list_emplace_front(_Object, xtl_allocator_data_clone(_Element, _Object->element_size));
 }
 
 
@@ -258,11 +240,6 @@ _XCCTLAPI_ bool __xcall__ xtl_list_emplace_back(xtl_list_t _Object, void* _Eleme
 {
 	xtl_list_node*		node = NULL;
 	xtl_list_node*		new_node = NULL;
-
-	if(_Element == NULL)
-	{
-		return false;
-	}
 
 	// 构建一个节点
 	new_node = xtl_list_node_emplace(_Element);
@@ -294,11 +271,6 @@ _XCCTLAPI_ bool __xcall__ xtl_list_emplace_back(xtl_list_t _Object, void* _Eleme
 _XCCTLAPI_ bool __xcall__ xtl_list_emplace_front(xtl_list_t _Object, void* _Element)
 {
 	xtl_list_node*		new_node = NULL;
-
-	if(_Element == NULL)
-	{
-		return false;
-	}
 
 	// 构建一个节点
 	new_node = xtl_list_node_emplace(_Element);

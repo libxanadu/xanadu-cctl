@@ -255,7 +255,7 @@ _XCCTLAPI_ xtl_vector_iter_t __xcall__ xtl_vector_end(xtl_vector_t _Object)
 /// 当前迭代器的上一个迭代器
 _XCCTLAPI_ xtl_vector_iter_t __xcall__ xtl_vector_iter_prev(xtl_vector_t _Object, xtl_vector_iter_t _Iterator)
 {
-	if(_Object->data - (char*)_Iterator < _Object->element_size)
+	if(_Object->data > ((char*)_Iterator - _Object->element_size))
 	{
 		return xtl_vector_end(_Object);
 	}
@@ -265,7 +265,7 @@ _XCCTLAPI_ xtl_vector_iter_t __xcall__ xtl_vector_iter_prev(xtl_vector_t _Object
 /// 当前迭代器的下一个迭代器
 _XCCTLAPI_ xtl_vector_iter_t __xcall__ xtl_vector_iter_next(xtl_vector_t _Object, xtl_vector_iter_t _Iterator)
 {
-	if((_Object->data + (_Object->size * _Object->element_size)) - (char*)_Iterator < _Object->element_size)
+	if((_Object->data + (_Object->size * _Object->element_size)) > ((char*)_Iterator - _Object->element_size))
 	{
 		return xtl_vector_end(_Object);
 	}
@@ -282,7 +282,7 @@ _XCCTLAPI_ xtl_vector_iter_t __xcall__ xtl_vector_erase(xtl_vector_t _Object, xt
 	xtl_size_t 		full_size = _Object->size * _Object->element_size;
 	char*			iter_data = (char*)_Iterator;
 
-	if(iter_data - _Object->data > (full_size - _Object->element_size))
+	if(iter_data > (_Object->data + full_size - _Object->element_size))
 	{
 		x_posix_memset(iter_data, 0, _Object->element_size);
 		--_Object->size;
