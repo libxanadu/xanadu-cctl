@@ -9,74 +9,74 @@ extern "C" {
 #endif
 
 
-// stack 类型
+// stack type
 struct xtl_stack_data;
 typedef struct xtl_stack_data*			xtl_stack_t;
 
 
 
-/// 创建一个stack
-/// \param _ElementSize : 单个元素的大小
-/// \return : stack容器
+/// create a stack
+/// \param _ElementSize : The size of a single element
+/// \return : stack container
 _XCCTLAPI_ xtl_stack_t __xcall__ xtl_stack_new(xtl_size_t _ElementSize);
 
-/// 释放一个stack
-/// \param _Object : stack容器
+/// free stack object
+/// \param _Object : stack container
 _XCCTLAPI_ void __xcall__ xtl_stack_free(xtl_stack_t _Object);
 
 
 
-/// 获取容器的大小
-/// \param _Object : stack容器
-/// \return : 容器的大小
+/// container size
+/// \param _Object : stack container
+/// \return : container size
 _XCCTLAPI_ xtl_size_t __xcall__ xtl_stack_size(xtl_stack_t _Object);
 
-/// 获取容器的最大大小
-/// \param _Object : stack容器
-/// \return : 容器的容量
+/// the maximum size of the container
+/// \param _Object : stack container
+/// \return : maximum size
 _XCCTLAPI_ xtl_size_t __xcall__ xtl_stack_max_size(xtl_stack_t _Object);
 
 
 
-/// 容器是否为空
-/// \param _Object : stack容器
-/// \return : 当容器为空时返回true，否则返回false
+/// Check if container is empty
+/// \param _Object : stack container
+/// \return : Returns true if the container is empty, otherwise returns false
 _XCCTLAPI_ bool __xcall__ xtl_stack_empty(xtl_stack_t _Object);
 
-/// 容器是否存在元素
-/// \param _Object : stack容器
-/// \return : 当容器存在元素时返回true，为空时返回false
+/// Check if an element exists in a container
+/// \param _Object : stack container
+/// \return : Returns true if the container has an element, false if it is empty
 _XCCTLAPI_ bool __xcall__ xtl_stack_exist(xtl_stack_t _Object);
 
 
 
-/// 清空容器
-/// \param _Object : stack容器
-/// \return : 成功返回true，失败返回false
+/// Empty all data in container
+/// \param _Object : stack container
+/// \return : Returns true on success, false on failure
 _XCCTLAPI_ bool __xcall__ xtl_stack_clear(xtl_stack_t _Object);
 
 
 
-/// 在顶部插入元素
-/// \param _Object : stack容器
-/// \param _Element : 元素内存的指针
-/// \return : 成功返回true，失败返回false
+/// Insert element at the top
+/// \param _Object : stack container
+/// \param _Element : the memory pointer of the element
+/// \return : Returns true on success, false on failure
 _XCCTLAPI_ bool __xcall__ xtl_stack_push(xtl_stack_t _Object, const void* _Element);
 
-/// 在顶部插入元素
-/// \param _Object : stack容器
-/// \param _Element : 元素内存的指针
-/// \return : 成功返回true，失败返回false
+/// Insert element at the top
+/// \param _Object : stack container
+/// \param _Element : the memory pointer of the element
+/// \return : Returns true on success, false on failure
 _XCCTLAPI_ bool __xcall__ xtl_stack_emplace(xtl_stack_t _Object, void* _Element);
 
-/// 从顶部移除元素
-/// \param _Object : stack容器
-/// \return : 成功返回true，失败返回false
+/// remove element from top
+/// \param _Object : stack container
+/// \return : Returns true on success, false on failure
 _XCCTLAPI_ bool __xcall__ xtl_stack_pop(xtl_stack_t _Object);
 
-/// 访问顶部元素
-/// \param _Object : stack容器
-/// \return : 数据指针
+/// access top element
+/// \param _Object : stack container
+/// \return : data pointer
 _XCCTLAPI_ void* __xcall__ xtl_stack_top(xtl_stack_t _Object);
 
 

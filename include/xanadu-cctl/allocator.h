@@ -9,25 +9,40 @@ extern "C" {
 #endif
 
 
-// Allocator 句柄
+/// 容器类型
+typedef enum xtl_container_type
+{
+	XTL_CONTAINER_ARRAY			= 0,
+	XTL_CONTAINER_DEQUE			= 1,
+	XTL_CONTAINER_LIST			= 2,
+	XTL_CONTAINER_MAP			= 3,
+	XTL_CONTAINER_QUEUE			= 4,
+	XTL_CONTAINER_SET			= 5,
+	XTL_CONTAINER_STACK			= 6,
+	XTL_CONTAINER_VECTOR			= 7,
+	XTL_CONTAINER_UNKNOWN			= 8
+}xtl_container_type;
+
+
+// Allocator handle
 struct xtl_allocator_data;
 typedef struct xtl_allocator_data*		xtl_allocator_t;
 
 
 
-/// 复制一份数据，如果数据为空，则初始化为'\0'
-/// \param _Data : 数据指针
-/// \param _Size : 数据长度
-/// \return : 复制后的数据
+/// Copy a copy of the data, if the data is empty, it is initialized to 0
+/// \param _Data : data pointer
+/// \param _Size : Data length
+/// \return : copied data
 _XCCTLAPI_ void* __xcall__ xtl_allocator_data_clone(const void* _Data, xtl_size_t _Size);
 
-/// 根据输入参数计算容量
-/// \param _Size : 想要分配的大小
-/// \return : 计算后的容量
+/// Calculate the required container capacity based on size
+/// \param _Size : the size you want to allocate
+/// \return : Calculated capacity
 _XCCTLAPI_ xtl_size_t __xcall__ xtl_allocator_calculation_capacity(xtl_size_t _Size);
 
-/// 容器允许的最大长度
-/// \return : 允许的最大长度
+/// The maximum length allowed by the container
+/// \return : maximum length
 _XCCTLAPI_ xtl_size_t __xcall__ xtl_allocator_max_size();
 
 

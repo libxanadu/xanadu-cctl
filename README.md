@@ -1,28 +1,28 @@
 # xanadu-cctl
-*C语言模拟C++的模板库*
+*Use C language to simulate the template library of C++*
 
 
 
-## 说明
-此项目使用C语言模拟C++的STL模板库
+## Explain
+This project uses pure C language to simulate some functions in the C++ standard template library, such as containers.
 
 
 
-### 功能
+### Function
 ~~~
-deque		: 模拟std::deque
-list		: 模拟std::list
-map		: 模拟std::map
-queue		: 模拟std::queue
-set		: 模拟std::set
-stack		: 模拟std::stack
-vector		: 模拟std::vector
+deque		: simulate std::deque
+list		: simulate std::list
+map		: simulate std::map
+queue		: simulate std::queue
+set		: simulate std::set
+stack		: simulate std::stack
+vector		: simulate std::vector
 ~~~
 
 
 
-## 注意
-如果要提交拉取请求，请按以下格式编写代码。
+## Note
+If you want to commit any changes, write the code in the following format.
 
 set encoding=utf-8 with BOM
 
@@ -32,11 +32,22 @@ set shiftwidth=8
 
 
 
-## 安装
+
+## Comment format
+
+```shell
+/// Function description
+/// \param _Value : Parameter explanation
+/// \return : Return value description
+```
+
+
+
+## Installation
 
 ### Linux
 
-首先安装所有必需的依赖项和构建工具:
+First install all required dependencies and build tools:
 ```shell
 sudo apt install git
 sudo apt install autoconf
@@ -45,19 +56,18 @@ sudo apt install libtool-bin
 sudo apt install cmake
 ```
 
-解决所有依赖项:
+Resolve all dependencies:
 
-*[libxanadu/xanadu-posix](https://github.com/libxanadu/xanadu-posix)*
+[xanadu-posix](https://github.com/libxanadu/xanadu-posix)
 
-
-然后克隆实际的项目存储库:
+Then clone the actual project repository:
 ```shell
 git clone https://github.com/libxanadu/xanadu-cctl.git
 svn checkout https://github.com/libxanadu/xanadu-cctl/trunk
 cd xanadu-cctl
 ```
 
-现在您可以构建和安装它:
+Now you can build and install it:
 ```shell
 cmake .
 make
@@ -68,5 +78,5 @@ sudo make install
 
 ## License
 
-这个库是根据 [GNU Lesser General Public License v2.1](https://www.gnu.org/licenses/lgpl-2.1.en.html) 获得的许可，
-存储库中也包含“许可证”文件。
+This library is licensed under the [GNU Lesser General Public License v2.1](https://www.gnu.org/licenses/lgpl-2.1.en.html),
+also included in the repository in the `LICENSE` file.

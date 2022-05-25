@@ -15,6 +15,8 @@ typedef struct xtl_list_node
 // list 类型
 struct xtl_list_data
 {
+	xtl_container_type		type;
+
 	xtl_list_node*			root;
 	xtl_size_t			size;
 	xtl_size_t 			element_size;
@@ -71,13 +73,14 @@ static xtl_list_node* xtl_list_node_at(xtl_list_t _Object, xtl_pos_t _Pos)
 
 
 
-/// 创建一个list
+/// create a list
 _XCCTLAPI_ xtl_list_t __xcall__ xtl_list_new(xtl_size_t _ElementSize)
 {
 	xtl_list_t	_Object = (xtl_list_t) x_posix_malloc(sizeof(struct xtl_list_data));
 	if(_Object)
 	{
 		x_posix_memset(_Object, 0, sizeof(struct xtl_list_data));
+		_Object->type = XTL_CONTAINER_LIST;
 		_Object->size = 0;
 		_Object->element_size = _ElementSize;
 		_Object->root = (xtl_list_node*) x_posix_malloc(sizeof(xtl_list_node));
@@ -94,7 +97,7 @@ _XCCTLAPI_ xtl_list_t __xcall__ xtl_list_new(xtl_size_t _ElementSize)
 	return _Object;
 }
 
-/// 释放一个list
+/// free list object
 _XCCTLAPI_ void __xcall__ xtl_list_free(xtl_list_t _Object)
 {
 	xtl_list_clear(_Object);
@@ -110,13 +113,13 @@ _XCCTLAPI_ void __xcall__ xtl_list_free(xtl_list_t _Object)
 
 
 
-/// 获取容器的大小
+/// container size
 _XCCTLAPI_ xtl_size_t __xcall__ xtl_list_size(xtl_list_t _Object)
 {
 	return _Object->size;
 }
 
-/// 获取容器的最大大小
+/// the maximum size of the container
 _XCCTLAPI_ xtl_size_t __xcall__ xtl_list_max_size(xtl_list_t _Object)
 {
 	XANADU_UNUSED(_Object);
@@ -127,13 +130,13 @@ _XCCTLAPI_ xtl_size_t __xcall__ xtl_list_max_size(xtl_list_t _Object)
 
 
 
-/// 容器是否为空
+/// Check if container is empty
 _XCCTLAPI_ bool __xcall__ xtl_list_empty(xtl_list_t _Object)
 {
 	return _Object->size == 0;
 }
 
-/// 容器是否存在元素
+/// Check if an element exists in a container
 _XCCTLAPI_ bool __xcall__ xtl_list_exist(xtl_list_t _Object)
 {
 	return _Object->size != 0;
@@ -143,13 +146,13 @@ _XCCTLAPI_ bool __xcall__ xtl_list_exist(xtl_list_t _Object)
 
 
 
-/// 清空容器
+/// Empty all data in container
 _XCCTLAPI_ bool __xcall__ xtl_list_clear(xtl_list_t _Object)
 {
 	return xtl_list_resize(_Object, 0);
 }
 
-/// 构建空间
+/// Resize the container
 _XCCTLAPI_ bool __xcall__ xtl_list_resize(xtl_list_t _Object, xtl_size_t _Size)
 {
 	xtl_size_t		vIndex = 0;
@@ -219,13 +222,13 @@ _XCCTLAPI_ bool __xcall__ xtl_list_resize(xtl_list_t _Object, xtl_size_t _Size)
 
 
 
-/// 在尾部追加一个元素
+/// append an element to the end
 _XCCTLAPI_ bool __xcall__ xtl_list_push_back(xtl_list_t _Object, const void* _Element)
 {
 	return xtl_list_emplace_back(_Object, xtl_allocator_data_clone(_Element, _Object->element_size));
 }
 
-/// 在头部插入一个元素
+/// Insert an element at the head
 _XCCTLAPI_ bool __xcall__ xtl_list_push_front(xtl_list_t _Object, const void* _Element)
 {
 	return xtl_list_emplace_front(_Object, xtl_allocator_data_clone(_Element, _Object->element_size));
@@ -235,7 +238,7 @@ _XCCTLAPI_ bool __xcall__ xtl_list_push_front(xtl_list_t _Object, const void* _E
 
 
 
-/// 在尾部追加一个元素
+/// append an element to the end
 _XCCTLAPI_ bool __xcall__ xtl_list_emplace_back(xtl_list_t _Object, void* _Element)
 {
 	xtl_list_node*		node = NULL;
@@ -267,7 +270,7 @@ _XCCTLAPI_ bool __xcall__ xtl_list_emplace_back(xtl_list_t _Object, void* _Eleme
 	return true;
 }
 
-/// 在头部插入一个元素
+/// Insert an element at the head
 _XCCTLAPI_ bool __xcall__ xtl_list_emplace_front(xtl_list_t _Object, void* _Element)
 {
 	xtl_list_node*		new_node = NULL;
@@ -297,7 +300,7 @@ _XCCTLAPI_ bool __xcall__ xtl_list_emplace_front(xtl_list_t _Object, void* _Elem
 
 
 
-/// 获取迭代器的数据
+/// the element data pointed to by the iterator
 _XCCTLAPI_ void* __xcall__ xtl_list_iter_data(xtl_list_t _Object, xtl_list_iter_t _Iterator)
 {
 	XANADU_UNUSED(_Object);
@@ -312,7 +315,7 @@ _XCCTLAPI_ void* __xcall__ xtl_list_iter_data(xtl_list_t _Object, xtl_list_iter_
 	return node->data;
 }
 
-/// 获取指向开头的迭代器
+/// iterator to the beginning of the container
 _XCCTLAPI_ xtl_list_iter_t __xcall__ xtl_list_begin(xtl_list_t _Object)
 {
 	if(_Object->size == 0)
@@ -322,14 +325,14 @@ _XCCTLAPI_ xtl_list_iter_t __xcall__ xtl_list_begin(xtl_list_t _Object)
 	return (xtl_list_iter_t)(_Object->root->next);
 }
 
-/// 获取指向末尾的迭代器
+/// iterator to the end of the container
 _XCCTLAPI_ xtl_list_iter_t __xcall__ xtl_list_end(xtl_list_t _Object)
 {
 	XANADU_UNUSED(_Object);
 	return XTL_ITERATOR_NULL;
 }
 
-/// 当前迭代器的上一个迭代器
+/// the previous iterator of the current iterator
 _XCCTLAPI_ xtl_list_iter_t __xcall__ xtl_list_iter_prev(xtl_list_t _Object, xtl_list_iter_t _Iterator)
 {
 	XANADU_UNUSED(_Object);
@@ -342,7 +345,7 @@ _XCCTLAPI_ xtl_list_iter_t __xcall__ xtl_list_iter_prev(xtl_list_t _Object, xtl_
 	return XTL_ITERATOR_NULL;
 }
 
-/// 当前迭代器的下一个迭代器
+/// the next iterator of the current iterator
 _XCCTLAPI_ xtl_list_iter_t __xcall__ xtl_list_iter_next(xtl_list_t _Object, xtl_list_iter_t _Iterator)
 {
 	XANADU_UNUSED(_Object);
@@ -359,7 +362,7 @@ _XCCTLAPI_ xtl_list_iter_t __xcall__ xtl_list_iter_next(xtl_list_t _Object, xtl_
 
 
 
-/// 移除迭代器指定的元素
+/// emoves the element specified by the iterator
 _XCCTLAPI_ xtl_list_iter_t __xcall__ xtl_list_erase(xtl_list_t _Object, xtl_list_iter_t _Iterator)
 {
 	XANADU_UNUSED(_Object);

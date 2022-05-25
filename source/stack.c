@@ -14,6 +14,8 @@ typedef struct xtl_stack_node
 // stack 类型
 struct xtl_stack_data
 {
+	xtl_container_type		type;
+
 	xtl_stack_node*			root;
 	xtl_size_t			size;
 	xtl_size_t 			element_size;
@@ -55,13 +57,14 @@ static xtl_stack_node* xtl_stack_node_new(const void* _Element, xtl_size_t _Size
 
 
 
-/// 创建一个stack
+/// create a stack
 _XCCTLAPI_ xtl_stack_t __xcall__ xtl_stack_new(xtl_size_t _ElementSize)
 {
 	xtl_stack_t	_Object = (xtl_stack_t) x_posix_malloc(sizeof(struct xtl_stack_data));
 	if(_Object)
 	{
 		x_posix_memset(_Object, 0, sizeof(struct xtl_stack_data));
+		_Object->type = XTL_CONTAINER_STACK;
 		_Object->size = 0;
 		_Object->element_size = _ElementSize;
 		_Object->root = (xtl_stack_node*) x_posix_malloc(sizeof(xtl_stack_node));
@@ -78,7 +81,7 @@ _XCCTLAPI_ xtl_stack_t __xcall__ xtl_stack_new(xtl_size_t _ElementSize)
 	return _Object;
 }
 
-/// 释放一个stack
+/// free stack object
 _XCCTLAPI_ void __xcall__ xtl_stack_free(xtl_stack_t _Object)
 {
 	xtl_stack_clear(_Object);
@@ -94,13 +97,13 @@ _XCCTLAPI_ void __xcall__ xtl_stack_free(xtl_stack_t _Object)
 
 
 
-/// 获取容器的大小
+/// container size
 _XCCTLAPI_ xtl_size_t __xcall__ xtl_stack_size(xtl_stack_t _Object)
 {
 	return _Object->size;
 }
 
-/// 获取容器的最大大小
+/// the maximum size of the container
 _XCCTLAPI_ xtl_size_t __xcall__ xtl_stack_max_size(xtl_stack_t _Object)
 {
 	XANADU_UNUSED(_Object);
@@ -111,13 +114,13 @@ _XCCTLAPI_ xtl_size_t __xcall__ xtl_stack_max_size(xtl_stack_t _Object)
 
 
 
-/// 容器是否为空
+/// Check if container is empty
 _XCCTLAPI_ bool __xcall__ xtl_stack_empty(xtl_stack_t _Object)
 {
 	return _Object->size == 0;
 }
 
-/// 容器是否存在元素
+/// Check if an element exists in a container
 _XCCTLAPI_ bool __xcall__ xtl_stack_exist(xtl_stack_t _Object)
 {
 	return _Object->size != 0;
@@ -127,7 +130,7 @@ _XCCTLAPI_ bool __xcall__ xtl_stack_exist(xtl_stack_t _Object)
 
 
 
-/// 清空容器
+/// Empty all data in container
 _XCCTLAPI_ bool __xcall__ xtl_stack_clear(xtl_stack_t _Object)
 {
 	xtl_stack_node*		node = NULL;
@@ -145,20 +148,17 @@ _XCCTLAPI_ bool __xcall__ xtl_stack_clear(xtl_stack_t _Object)
 
 
 
-/// 在顶部插入元素
+/// Insert element at the top
 _XCCTLAPI_ bool __xcall__ xtl_stack_push(xtl_stack_t _Object, const void* _Element)
 {
 	return xtl_stack_emplace(_Object, xtl_allocator_data_clone(_Element, _Object->element_size));
 }
 
-/// 在顶部插入元素
+/// Insert element at the top
 _XCCTLAPI_ bool __xcall__ xtl_stack_emplace(xtl_stack_t _Object, void* _Element)
 {
-	xtl_stack_node*		node = NULL;
-	xtl_stack_node*		new_node = NULL;
-
 	// 构建一个节点
-	new_node = xtl_stack_node_emplace(_Element);
+	xtl_stack_node*		new_node = xtl_stack_node_emplace(_Element);
 	if(new_node == NULL)
 	{
 		return false;
@@ -171,7 +171,7 @@ _XCCTLAPI_ bool __xcall__ xtl_stack_emplace(xtl_stack_t _Object, void* _Element)
 	return true;
 }
 
-/// 从顶部移除元素
+/// remove element from top
 _XCCTLAPI_ bool __xcall__ xtl_stack_pop(xtl_stack_t _Object)
 {
 	xtl_stack_node*		node = NULL;
@@ -189,7 +189,7 @@ _XCCTLAPI_ bool __xcall__ xtl_stack_pop(xtl_stack_t _Object)
 	}
 }
 
-/// 访问顶部元素
+/// access top element
 _XCCTLAPI_ void* __xcall__ xtl_stack_top(xtl_stack_t _Object)
 {
 	if(_Object->root->next)

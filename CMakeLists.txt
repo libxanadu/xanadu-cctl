@@ -12,19 +12,8 @@ project(xanadu-cctl VERSION ${PROJECT_CC_VERSION_MAJOR}.${PROJECT_CC_VERSION_MIN
 # 输出提示信息
 message(STATUS "Operation System : ${CMAKE_SYSTEM}")
 message(STATUS "CMAKE_INSTALL_PREFIX : ${CMAKE_INSTALL_PREFIX}")
+message(STATUS "CMAKE_C_COMPILER : ${CMAKE_C_COMPILER}")
 message(STATUS "CMAKE_CXX_COMPILER : ${CMAKE_CXX_COMPILER}")
-
-
-# 设置第三方库路径
-if (WIN32)
-	set(PACKAGE_DIRECTORY_INCLUDE $ENV{CXX_LIBRARY}/binary/windows/include)
-	set(PACKAGE_DIRECTORY_LIBRARY $ENV{CXX_LIBRARY}/binary/windows/lib)
-else()
-	set(PACKAGE_DIRECTORY_INCLUDE $ENV{CXX_LIBRARY}/binary/common/include)
-	set(PACKAGE_DIRECTORY_LIBRARY $ENV{CXX_LIBRARY}/binary/common/lib)
-endif()
-message(STATUS "PACKAGE_DIRECTORY_INCLUDE : ${PACKAGE_DIRECTORY_INCLUDE}")
-message(STATUS "PACKAGE_DIRECTORY_LIBRARY : ${PACKAGE_DIRECTORY_LIBRARY}")
 
 
 # 配置文件
@@ -44,7 +33,6 @@ configure_file("${CMAKE_SOURCE_DIR}/config/VersionInfo.rc.in" "${CMAKE_BINARY_DI
 
 # 设置模块搜索路径
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_INSTALL_PREFIX}/lib/cmake)
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} $ENV{CXX_DEV}/xanadu/binary/lib/cmake)
 set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${CMAKE_INSTALL_PREFIX}/lib/cmake)
 message(STATUS "CMAKE_MODULE_PATH : ${CMAKE_MODULE_PATH}")
 message(STATUS "CMAKE_PREFIX_PATH : ${CMAKE_PREFIX_PATH}")
@@ -54,7 +42,7 @@ message(STATUS "CMAKE_PREFIX_PATH : ${CMAKE_PREFIX_PATH}")
 if (MSVC)
 	add_compile_options(/W4)
 else()
-	add_compile_options(-Wall -fpermissive)
+	add_compile_options(-Wall)
 endif()
 if (X_SERIES_LIBRARY_TYPE STREQUAL "STATIC")
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC -static")
@@ -82,12 +70,10 @@ set(CMAKE_C_STANDARD 11)
 
 
 # 头文件搜索目录
-include_directories(${PACKAGE_DIRECTORY_INCLUDE})
 include_directories(${XANADU_POSIX_INCLUDE})
 
 
 # 链接库搜索目录
-link_directories(${PACKAGE_DIRECTORY_LIBRARY})
 link_directories(${XANADU_POSIX_LIBRARY})
 
 
@@ -98,11 +84,14 @@ else()
 	add_definitions(-DXANADU_CCTL_BUILD_LOCAL)
 endif()
 add_definitions(-D_FILE_OFFSET_BITS=64)
-add_definitions(-D_XANADU_EXCEPTION_OUTPUT)
 add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 add_definitions(-D_WINSOCK_DEPRECATED_NO_WARNINGS)
 add_definitions(-D_SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING)
-add_definitions(-D_XANADU_LOG_ENABLE)
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+	add_definitions(-DXANADU_BUILD_DEBUG)
+else ()
+	add_definitions(-DXANADU_BUILD_RELEASE)
+endif ()
 
 
 # 包含源文件

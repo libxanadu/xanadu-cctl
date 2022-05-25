@@ -6,6 +6,8 @@
 // vector 数据
 struct xtl_vector_data
 {
+	xtl_container_type		type;
+
 	char*				data;
 	xtl_size_t			size;
 	xtl_size_t 			capacity;
@@ -14,7 +16,7 @@ struct xtl_vector_data
 
 
 
-/// 创建一个vector
+/// create a vector
 _XCCTLAPI_ xtl_vector_t __xcall__ xtl_vector_new(size_t _ElementSize)
 {
 	if(_ElementSize == 0)
@@ -26,6 +28,7 @@ _XCCTLAPI_ xtl_vector_t __xcall__ xtl_vector_new(size_t _ElementSize)
 	if(_Object)
 	{
 		x_posix_memset(_Object, 0, sizeof(struct xtl_vector_data));
+		_Object->type = XTL_CONTAINER_VECTOR;
 		_Object->element_size = _ElementSize;
 		_Object->capacity = XTL_DEFAULT_CAPACITY;
 		_Object->data = (char*)x_posix_malloc(_ElementSize * _Object->capacity);
@@ -42,7 +45,7 @@ _XCCTLAPI_ xtl_vector_t __xcall__ xtl_vector_new(size_t _ElementSize)
 	return _Object;
 }
 
-/// 释放一个vector
+/// free vector object
 _XCCTLAPI_ void __xcall__ xtl_vector_free(xtl_vector_t _Object)
 {
 	if (_Object)
@@ -56,19 +59,19 @@ _XCCTLAPI_ void __xcall__ xtl_vector_free(xtl_vector_t _Object)
 
 
 
-/// 获取容器的具体数据指针
+/// container data
 _XCCTLAPI_ void* __xcall__ xtl_vector_data(xtl_vector_t _Object)
 {
 	return _Object->data;
 }
 
-/// 获取容器的大小
+/// container size
 _XCCTLAPI_ xtl_size_t __xcall__ xtl_vector_size(xtl_vector_t _Object)
 {
 	return _Object->size;
 }
 
-/// 获取容器的容量
+/// container capacity
 _XCCTLAPI_ xtl_size_t __xcall__ xtl_vector_capacity(xtl_vector_t _Object)
 {
 	return _Object->capacity;
@@ -78,13 +81,13 @@ _XCCTLAPI_ xtl_size_t __xcall__ xtl_vector_capacity(xtl_vector_t _Object)
 
 
 
-/// 容器是否为空
+/// Check if container is empty
 _XCCTLAPI_ bool __xcall__ xtl_vector_empty(xtl_vector_t _Object)
 {
 	return _Object->size == 0;
 }
 
-/// 容器是否存在元素
+/// Check if an element exists in a container
 _XCCTLAPI_ bool __xcall__ xtl_vector_exist(xtl_vector_t _Object)
 {
 	return _Object->size != 0;
@@ -94,7 +97,7 @@ _XCCTLAPI_ bool __xcall__ xtl_vector_exist(xtl_vector_t _Object)
 
 
 
-/// 根据下标访问指定的元素
+/// Access the specified element by subscript
 _XCCTLAPI_ void* __xcall__ xtl_vector_at(xtl_vector_t _Object, xtl_size_t _Pos)
 {
 	if(_Object->size <= _Pos)
@@ -108,7 +111,7 @@ _XCCTLAPI_ void* __xcall__ xtl_vector_at(xtl_vector_t _Object, xtl_size_t _Pos)
 
 
 
-/// 清空容器
+/// Empty all data in container
 _XCCTLAPI_ bool __xcall__ xtl_vector_clear(xtl_vector_t _Object)
 {
 	x_posix_free(_Object->data);
@@ -118,7 +121,7 @@ _XCCTLAPI_ bool __xcall__ xtl_vector_clear(xtl_vector_t _Object)
 	return _Object->data;
 }
 
-/// 构建空间
+/// Resize the container
 _XCCTLAPI_ bool __xcall__ xtl_vector_resize(xtl_vector_t _Object, xtl_size_t _Size)
 {
 	char*		new_data = NULL;
@@ -156,7 +159,7 @@ _XCCTLAPI_ bool __xcall__ xtl_vector_resize(xtl_vector_t _Object, xtl_size_t _Si
 
 
 
-/// 在尾部追加一个元素
+/// append an element to the end
 _XCCTLAPI_ bool __xcall__ xtl_vector_push_back(xtl_vector_t _Object, const void* _Element)
 {
 	if(_Element == NULL || false == xtl_vector_resize(_Object, _Object->size + 1))
@@ -169,7 +172,7 @@ _XCCTLAPI_ bool __xcall__ xtl_vector_push_back(xtl_vector_t _Object, const void*
 	return true;
 }
 
-/// 在头部插入一个元素
+/// Insert an element at the head
 _XCCTLAPI_ bool __xcall__ xtl_vector_push_front(xtl_vector_t _Object, const void* _Element)
 {
 	if(_Element == NULL || false == xtl_vector_resize(_Object, _Object->size + 1))
@@ -183,7 +186,7 @@ _XCCTLAPI_ bool __xcall__ xtl_vector_push_front(xtl_vector_t _Object, const void
 	return true;
 }
 
-/// 在指定下标处插入一个元素
+/// Inserts an element at the specified subscript
 _XCCTLAPI_ bool __xcall__ xtl_vector_insert(xtl_vector_t _Object, xtl_size_t _Pos, const void* _Element)
 {
 	if(_Element == NULL || false == xtl_vector_resize(_Object, _Object->size + 1))
@@ -202,7 +205,7 @@ _XCCTLAPI_ bool __xcall__ xtl_vector_insert(xtl_vector_t _Object, xtl_size_t _Po
 	return true;
 }
 
-/// 将容器的元素替换为指定数量的元素
+/// Replaces the elements of the container with the specified number of elements
 _XCCTLAPI_ bool __xcall__ xtl_vector_assign(xtl_vector_t _Object, xtl_size_t _Count, const void* _Element)
 {
 	if(_Element == NULL)
@@ -227,7 +230,7 @@ _XCCTLAPI_ bool __xcall__ xtl_vector_assign(xtl_vector_t _Object, xtl_size_t _Co
 
 
 
-/// 获取迭代器的数据
+/// the element data pointed to by the iterator
 _XCCTLAPI_ void* __xcall__ xtl_vector_iter_data(xtl_vector_t _Object, xtl_vector_iter_t _Iterator)
 {
 	XANADU_UNUSED(_Object);
@@ -235,7 +238,7 @@ _XCCTLAPI_ void* __xcall__ xtl_vector_iter_data(xtl_vector_t _Object, xtl_vector
 	return _Iterator;
 }
 
-/// 获取指向开头的迭代器
+/// iterator to the beginning of the container
 _XCCTLAPI_ xtl_vector_iter_t __xcall__ xtl_vector_begin(xtl_vector_t _Object)
 {
 	if(_Object->size == 0)
@@ -245,14 +248,14 @@ _XCCTLAPI_ xtl_vector_iter_t __xcall__ xtl_vector_begin(xtl_vector_t _Object)
 	return (xtl_vector_iter_t)(_Object->data);
 }
 
-/// 获取指向末尾的迭代器
+/// iterator to the end of the container
 _XCCTLAPI_ xtl_vector_iter_t __xcall__ xtl_vector_end(xtl_vector_t _Object)
 {
 	XANADU_UNUSED(_Object);
 	return XTL_ITERATOR_NULL;
 }
 
-/// 当前迭代器的上一个迭代器
+/// the previous iterator of the current iterator
 _XCCTLAPI_ xtl_vector_iter_t __xcall__ xtl_vector_iter_prev(xtl_vector_t _Object, xtl_vector_iter_t _Iterator)
 {
 	if(_Object->data > ((char*)_Iterator - _Object->element_size))
@@ -262,7 +265,7 @@ _XCCTLAPI_ xtl_vector_iter_t __xcall__ xtl_vector_iter_prev(xtl_vector_t _Object
 	return (xtl_vector_iter_t)(((char*)_Iterator) - _Object->element_size);
 }
 
-/// 当前迭代器的下一个迭代器
+/// the next iterator of the current iterator
 _XCCTLAPI_ xtl_vector_iter_t __xcall__ xtl_vector_iter_next(xtl_vector_t _Object, xtl_vector_iter_t _Iterator)
 {
 	if((_Object->data + (_Object->size * _Object->element_size)) > ((char*)_Iterator - _Object->element_size))
@@ -276,7 +279,7 @@ _XCCTLAPI_ xtl_vector_iter_t __xcall__ xtl_vector_iter_next(xtl_vector_t _Object
 
 
 
-/// 移除迭代器指定的元素
+/// emoves the element specified by the iterator
 _XCCTLAPI_ xtl_vector_iter_t __xcall__ xtl_vector_erase(xtl_vector_t _Object, xtl_vector_iter_t _Iterator)
 {
 	xtl_size_t 		full_size = _Object->size * _Object->element_size;

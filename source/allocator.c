@@ -2,7 +2,7 @@
 
 
 
-/// 复制一份数据，如果数据为空，则初始化为'\0'
+/// Copy a copy of the data, if the data is empty, it is initialized to 0
 _XCCTLAPI_ void* __xcall__ xtl_allocator_data_clone(const void* _Data, xtl_size_t _Size)
 {
 	void*		data = x_posix_malloc(_Size);
@@ -20,7 +20,7 @@ _XCCTLAPI_ void* __xcall__ xtl_allocator_data_clone(const void* _Data, xtl_size_
 	return data;
 }
 
-/// 根据输入参数计算容量
+/// Calculate the required container capacity based on size
 _XCCTLAPI_ xtl_size_t __xcall__ xtl_allocator_calculation_capacity(xtl_size_t _Size)
 {
 	xtl_size_t	capacity = XTL_DEFAULT_CAPACITY;
@@ -31,8 +31,8 @@ _XCCTLAPI_ xtl_size_t __xcall__ xtl_allocator_calculation_capacity(xtl_size_t _S
 	return capacity;
 }
 
-/// 容器允许的最大长度
-/// \return : 允许的最大长度
+/// The maximum length allowed by the container
+/// \return : maximum length
 _XCCTLAPI_ xtl_size_t __xcall__ xtl_allocator_max_size()
 {
 	return (xtl_pos_t)-1;
