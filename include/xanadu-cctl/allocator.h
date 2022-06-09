@@ -4,9 +4,7 @@
 #include <xanadu-cctl/header.h>
 
 
-#if defined(__cplusplus)
-extern "C" {
-#endif
+XANADU_CXX_EXTERN_BEGIN
 
 
 /// 容器类型
@@ -47,9 +45,7 @@ _XCCTLAPI_ xtl_size_t __xcall__ xtl_allocator_max_size();
 
 
 
-#if defined(__cplusplus)
-}
-#endif
+XANADU_CXX_EXTERN_END
 
 
 #endif

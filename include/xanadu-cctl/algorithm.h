@@ -4,9 +4,7 @@
 #include <xanadu-cctl/header.h>
 
 
-#if defined(__cplusplus)
-extern "C" {
-#endif
+XANADU_CXX_EXTERN_BEGIN
 
 
 /// Sort callback
@@ -27,9 +25,7 @@ typedef int (__xcall__ * xtl_algorithm_sort_cb_t)(const void* _Value1, const voi
 _XCCTLAPI_ bool xtl_algorithm_sort(void* _Container, xtl_algorithm_sort_cb_t _CallBack, void* _UserData);
 
 
-#if defined(__cplusplus)
-}
-#endif
+XANADU_CXX_EXTERN_END
 
 
 #endif

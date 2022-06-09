@@ -17,9 +17,7 @@
 #endif
 
 
-#if defined(__cplusplus)
-extern "C" {
-#endif
+XANADU_CXX_EXTERN_BEGIN
 
 // xanadu cctl 类型定义
 typedef			size_t						xtl_pos_t;
@@ -30,9 +28,7 @@ typedef			size_t 						xtl_size_t;
 #define 		XTL_ITERATOR_NULL				(NULL)
 #define 		XTL_DEFAULT_CAPACITY				(8)
 
-#if defined(__cplusplus)
-}
-#endif
+XANADU_CXX_EXTERN_END
 
 
 #endif
