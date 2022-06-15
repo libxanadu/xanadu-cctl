@@ -25,6 +25,17 @@ typedef int (__xcall__ * xtl_algorithm_sort_cb_t)(const void* _Value1, const voi
 _XCCTLAPI_ bool xtl_algorithm_sort(void* _Container, xtl_algorithm_sort_cb_t _CallBack, void* _UserData);
 
 
+
+
+
+/// Swap the contents of a container with the contents of other containers.
+/// \param _Object1 : container object
+/// \param _Object2 : container object
+/// \param _Size : size of the container
+_XCCTLAPI_ void __xcall__ xtl_algorithm_swap(void* _Object1, void* _Object2, xtl_size_t _Size);
+
+
+
 XANADU_CXX_EXTERN_END
 
 

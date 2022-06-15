@@ -45,3 +45,20 @@ _XCCTLAPI_ bool xtl_algorithm_sort(void* _Container, xtl_algorithm_sort_cb_t _Ca
 	}
 	return true;
 }
+
+
+
+
+
+/// Swap the contents of a container with the contents of other containers.
+_XCCTLAPI_ void __xcall__ xtl_algorithm_swap(void* _Object1, void* _Object2, xtl_size_t _Size)
+{
+	void*		_Swap = x_posix_malloc(_Size);
+	if(_Swap)
+	{
+		x_posix_memcpy(_Swap, _Object1, _Size);
+		x_posix_memcpy(_Object1, _Object2, _Size);
+		x_posix_memcpy(_Object2, _Swap, _Size);
+		x_posix_free(_Swap);
+	}
+}

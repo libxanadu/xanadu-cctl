@@ -18,7 +18,7 @@ struct xtl_stack_data
 
 	xtl_stack_node*			root;
 	xtl_size_t			size;
-	xtl_size_t 			element_size;
+	xtl_size_t 			elem_size;
 };
 
 
@@ -58,7 +58,7 @@ static xtl_stack_node* xtl_stack_node_new(const void* _Element, xtl_size_t _Size
 
 
 /// create a stack
-_XCCTLAPI_ xtl_stack_t __xcall__ xtl_stack_new(xtl_size_t _ElementSize)
+_XCCTLAPI_ xtl_stack_t __xcall__ xtl_stack_new(xtl_size_t _ElemSize)
 {
 	xtl_stack_t	_Object = (xtl_stack_t) x_posix_malloc(sizeof(struct xtl_stack_data));
 	if(_Object)
@@ -66,7 +66,7 @@ _XCCTLAPI_ xtl_stack_t __xcall__ xtl_stack_new(xtl_size_t _ElementSize)
 		x_posix_memset(_Object, 0, sizeof(struct xtl_stack_data));
 		_Object->type = XTL_CONTAINER_STACK;
 		_Object->size = 0;
-		_Object->element_size = _ElementSize;
+		_Object->elem_size = _ElemSize;
 		_Object->root = (xtl_stack_node*) x_posix_malloc(sizeof(xtl_stack_node));
 		if(_Object->root == NULL)
 		{
@@ -151,7 +151,7 @@ _XCCTLAPI_ bool __xcall__ xtl_stack_clear(xtl_stack_t _Object)
 /// Insert element at the top
 _XCCTLAPI_ bool __xcall__ xtl_stack_push(xtl_stack_t _Object, const void* _Element)
 {
-	return xtl_stack_emplace(_Object, xtl_allocator_data_clone(_Element, _Object->element_size));
+	return xtl_stack_emplace(_Object, xtl_allocator_data_clone(_Element, _Object->elem_size));
 }
 
 /// Insert element at the top

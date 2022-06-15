@@ -10,6 +10,7 @@ This project uses pure C language to simulate some functions in the C++ standard
 
 ### Function
 ~~~
+array		: simulate std::array
 deque		: simulate std::deque
 list		: simulate std::list
 map		: simulate std::map

@@ -11,15 +11,15 @@ struct xtl_vector_data
 	char*				data;
 	xtl_size_t			size;
 	xtl_size_t 			capacity;
-	xtl_size_t 			element_size;
+	xtl_size_t 			elem_size;
 };
 
 
 
 /// create a vector
-_XCCTLAPI_ xtl_vector_t __xcall__ xtl_vector_new(size_t _ElementSize)
+_XCCTLAPI_ xtl_vector_t __xcall__ xtl_vector_new(size_t _ElemSize)
 {
-	if(_ElementSize == 0)
+	if(_ElemSize == 0)
 	{
 		return NULL;
 	}
@@ -29,9 +29,10 @@ _XCCTLAPI_ xtl_vector_t __xcall__ xtl_vector_new(size_t _ElementSize)
 	{
 		x_posix_memset(_Object, 0, sizeof(struct xtl_vector_data));
 		_Object->type = XTL_CONTAINER_VECTOR;
-		_Object->element_size = _ElementSize;
+		_Object->size = 0;
+		_Object->elem_size = _ElemSize;
 		_Object->capacity = XTL_DEFAULT_CAPACITY;
-		_Object->data = (char*)x_posix_malloc(_ElementSize * _Object->capacity);
+		_Object->data = (char*)x_posix_malloc(_ElemSize * _Object->capacity);
 		if(_Object->data == NULL)
 		{
 			x_posix_free(_Object);
@@ -39,7 +40,7 @@ _XCCTLAPI_ xtl_vector_t __xcall__ xtl_vector_new(size_t _ElementSize)
 		}
 		else
 		{
-			x_posix_memset(_Object->data, 0, _ElementSize * _Object->capacity);
+			x_posix_memset(_Object->data, 0, _ElemSize * _Object->capacity);
 		}
 	}
 	return _Object;
@@ -104,7 +105,7 @@ _XCCTLAPI_ void* __xcall__ xtl_vector_at(xtl_vector_t _Object, xtl_size_t _Pos)
 	{
 		return NULL;
 	}
-	return _Object->data + (_Pos * _Object->element_size);
+	return _Object->data + (_Pos * _Object->elem_size);
 }
 
 
@@ -117,7 +118,7 @@ _XCCTLAPI_ bool __xcall__ xtl_vector_clear(xtl_vector_t _Object)
 	x_posix_free(_Object->data);
 	_Object->size = 0;
 	_Object->capacity = xtl_allocator_calculation_capacity(_Object->size);
-	_Object->data = (char*)x_posix_malloc(_Object->element_size * _Object->capacity);
+	_Object->data = (char*)x_posix_malloc(_Object->elem_size * _Object->capacity);
 	return _Object->data;
 }
 
@@ -129,7 +130,7 @@ _XCCTLAPI_ bool __xcall__ xtl_vector_resize(xtl_vector_t _Object, xtl_size_t _Si
 
 	if(_Object->size > _Size)
 	{
-		x_posix_memset(_Object->data + (_Size * _Object->element_size), 0, _Object->size - _Size);
+		x_posix_memset(_Object->data + (_Size * _Object->elem_size), 0, _Object->size - _Size);
 		_Object->size = _Size;
 	}
 	else if(_Object->size < _Size)
@@ -137,19 +138,19 @@ _XCCTLAPI_ bool __xcall__ xtl_vector_resize(xtl_vector_t _Object, xtl_size_t _Si
 		if(_Object->capacity <= _Size)
 		{
 			new_capacity = xtl_allocator_calculation_capacity(_Size);
-			new_data = (char*)x_posix_malloc(new_capacity * _Object->element_size);
+			new_data = (char*)x_posix_malloc(new_capacity * _Object->elem_size);
 			if(new_data == NULL)
 			{
 				return false;
 			}
-			x_posix_memcpy(new_data, _Object->data, _Object->size * _Object->element_size);
-			x_posix_memset(new_data + (_Object->size * _Object->element_size), 0, (new_capacity - _Object->size) * _Object->element_size);
+			x_posix_memcpy(new_data, _Object->data, _Object->size * _Object->elem_size);
+			x_posix_memset(new_data + (_Object->size * _Object->elem_size), 0, (new_capacity - _Object->size) * _Object->elem_size);
 
 			x_posix_free(_Object->data);
 			_Object->capacity = new_capacity;
 			_Object->data = new_data;
 		}
-		x_posix_memset(_Object->data + (_Size * _Object->element_size), 0, _Object->size - _Size);
+		x_posix_memset(_Object->data + (_Size * _Object->elem_size), 0, _Object->size - _Size);
 		_Object->size = _Size;
 	}
 	return true;
@@ -167,7 +168,7 @@ _XCCTLAPI_ bool __xcall__ xtl_vector_push_back(xtl_vector_t _Object, const void*
 		return false;
 	}
 
-	x_posix_memcpy(_Object->data + (_Object->size * _Object->element_size), _Element, _Object->element_size);
+	x_posix_memcpy(_Object->data + (_Object->size * _Object->elem_size), _Element, _Object->elem_size);
 	_Object->size += 1;
 	return true;
 }
@@ -180,8 +181,8 @@ _XCCTLAPI_ bool __xcall__ xtl_vector_push_front(xtl_vector_t _Object, const void
 		return false;
 	}
 
-	x_posix_memmove(_Object->data + _Object->element_size, _Object->data, _Object->size * _Object->element_size);
-	x_posix_memcpy(_Object->data, _Element, _Object->element_size);
+	x_posix_memmove(_Object->data + _Object->elem_size, _Object->data, _Object->size * _Object->elem_size);
+	x_posix_memcpy(_Object->data, _Element, _Object->elem_size);
 	_Object->size += 1;
 	return true;
 }
@@ -199,8 +200,8 @@ _XCCTLAPI_ bool __xcall__ xtl_vector_insert(xtl_vector_t _Object, xtl_size_t _Po
 		_Pos = _Object->size;
 	}
 
-	x_posix_memmove(_Object->data + ((_Pos + 1) * _Object->element_size), _Object->data + (_Pos * _Object->element_size), (_Object->size - _Pos) * _Object->element_size);
-	x_posix_memcpy(_Object->data + (_Pos * _Object->element_size), _Element, _Object->element_size);
+	x_posix_memmove(_Object->data + ((_Pos + 1) * _Object->elem_size), _Object->data + (_Pos * _Object->elem_size), (_Object->size - _Pos) * _Object->elem_size);
+	x_posix_memcpy(_Object->data + (_Pos * _Object->elem_size), _Element, _Object->elem_size);
 	_Object->size += 1;
 	return true;
 }
@@ -221,7 +222,7 @@ _XCCTLAPI_ bool __xcall__ xtl_vector_assign(xtl_vector_t _Object, xtl_size_t _Co
 
 	for(xtl_size_t vIndex = 0; vIndex < _Count; ++vIndex)
 	{
-		x_posix_memcpy(_Object->data + (vIndex * _Object->element_size), _Element, _Object->element_size);
+		x_posix_memcpy(_Object->data + (vIndex * _Object->elem_size), _Element, _Object->elem_size);
 	}
 	return true;
 }
@@ -258,21 +259,21 @@ _XCCTLAPI_ xtl_vector_iter_t __xcall__ xtl_vector_end(xtl_vector_t _Object)
 /// the previous iterator of the current iterator
 _XCCTLAPI_ xtl_vector_iter_t __xcall__ xtl_vector_iter_prev(xtl_vector_t _Object, xtl_vector_iter_t _Iterator)
 {
-	if(_Object->data > ((char*)_Iterator - _Object->element_size))
+	if(_Object->data > ((char*)_Iterator - _Object->elem_size))
 	{
 		return xtl_vector_end(_Object);
 	}
-	return (xtl_vector_iter_t)(((char*)_Iterator) - _Object->element_size);
+	return (xtl_vector_iter_t)(((char*)_Iterator) - _Object->elem_size);
 }
 
 /// the next iterator of the current iterator
 _XCCTLAPI_ xtl_vector_iter_t __xcall__ xtl_vector_iter_next(xtl_vector_t _Object, xtl_vector_iter_t _Iterator)
 {
-	if((_Object->data + (_Object->size * _Object->element_size)) > ((char*)_Iterator - _Object->element_size))
+	if((_Object->data + (_Object->size * _Object->elem_size)) > ((char*)_Iterator - _Object->elem_size))
 	{
 		return xtl_vector_end(_Object);
 	}
-	return (xtl_vector_iter_t)(((char*)_Iterator) + _Object->element_size);
+	return (xtl_vector_iter_t)(((char*)_Iterator) + _Object->elem_size);
 }
 
 
@@ -282,20 +283,20 @@ _XCCTLAPI_ xtl_vector_iter_t __xcall__ xtl_vector_iter_next(xtl_vector_t _Object
 /// emoves the element specified by the iterator
 _XCCTLAPI_ xtl_vector_iter_t __xcall__ xtl_vector_erase(xtl_vector_t _Object, xtl_vector_iter_t _Iterator)
 {
-	xtl_size_t 		full_size = _Object->size * _Object->element_size;
+	xtl_size_t 		full_size = _Object->size * _Object->elem_size;
 	char*			iter_data = (char*)_Iterator;
 
-	if(iter_data > (_Object->data + full_size - _Object->element_size))
+	if(iter_data > (_Object->data + full_size - _Object->elem_size))
 	{
-		x_posix_memset(iter_data, 0, _Object->element_size);
+		x_posix_memset(iter_data, 0, _Object->elem_size);
 		--_Object->size;
 		return xtl_vector_end(_Object);
 	}
 	else
 	{
-		x_posix_memcpy(iter_data, iter_data + _Object->element_size, _Object->element_size);
+		x_posix_memcpy(iter_data, iter_data + _Object->elem_size, _Object->elem_size);
 		--_Object->size;
-		x_posix_memset(_Object->data + (_Object->size * _Object->element_size), 0, _Object->element_size);
+		x_posix_memset(_Object->data + (_Object->size * _Object->elem_size), 0, _Object->elem_size);
 		return (xtl_vector_iter_t)iter_data;
 	}
 }

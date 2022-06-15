@@ -19,7 +19,7 @@ struct xtl_list_data
 
 	xtl_list_node*			root;
 	xtl_size_t			size;
-	xtl_size_t 			element_size;
+	xtl_size_t 			elem_size;
 };
 
 
@@ -74,7 +74,7 @@ static xtl_list_node* xtl_list_node_at(xtl_list_t _Object, xtl_pos_t _Pos)
 
 
 /// create a list
-_XCCTLAPI_ xtl_list_t __xcall__ xtl_list_new(xtl_size_t _ElementSize)
+_XCCTLAPI_ xtl_list_t __xcall__ xtl_list_new(xtl_size_t _ElemSize)
 {
 	xtl_list_t	_Object = (xtl_list_t) x_posix_malloc(sizeof(struct xtl_list_data));
 	if(_Object)
@@ -82,7 +82,7 @@ _XCCTLAPI_ xtl_list_t __xcall__ xtl_list_new(xtl_size_t _ElementSize)
 		x_posix_memset(_Object, 0, sizeof(struct xtl_list_data));
 		_Object->type = XTL_CONTAINER_LIST;
 		_Object->size = 0;
-		_Object->element_size = _ElementSize;
+		_Object->elem_size = _ElemSize;
 		_Object->root = (xtl_list_node*) x_posix_malloc(sizeof(xtl_list_node));
 		if(_Object->root == NULL)
 		{
@@ -194,7 +194,7 @@ _XCCTLAPI_ bool __xcall__ xtl_list_resize(xtl_list_t _Object, xtl_size_t _Size)
 		for(; vIndex < _Size; ++vIndex)
 		{
 			// 如果没有成功申请内存，则返回false
-			new_node = xtl_list_node_new(NULL, _Object->element_size);
+			new_node = xtl_list_node_new(NULL, _Object->elem_size);
 			if(new_node == NULL)
 			{
 				return false;
@@ -225,13 +225,13 @@ _XCCTLAPI_ bool __xcall__ xtl_list_resize(xtl_list_t _Object, xtl_size_t _Size)
 /// append an element to the end
 _XCCTLAPI_ bool __xcall__ xtl_list_push_back(xtl_list_t _Object, const void* _Element)
 {
-	return xtl_list_emplace_back(_Object, xtl_allocator_data_clone(_Element, _Object->element_size));
+	return xtl_list_emplace_back(_Object, xtl_allocator_data_clone(_Element, _Object->elem_size));
 }
 
 /// Insert an element at the head
 _XCCTLAPI_ bool __xcall__ xtl_list_push_front(xtl_list_t _Object, const void* _Element)
 {
-	return xtl_list_emplace_front(_Object, xtl_allocator_data_clone(_Element, _Object->element_size));
+	return xtl_list_emplace_front(_Object, xtl_allocator_data_clone(_Element, _Object->elem_size));
 }
 
 
