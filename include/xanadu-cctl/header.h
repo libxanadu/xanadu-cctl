@@ -16,7 +16,6 @@
 #endif
 #endif
 
-
 XANADU_CXX_EXTERN_BEGIN
 
 // xanadu cctl 类型定义
@@ -29,6 +28,5 @@ typedef			size_t 						xtl_size_t;
 #define 		XTL_DEFAULT_CAPACITY				(8)
 
 XANADU_CXX_EXTERN_END
-
 
 #endif

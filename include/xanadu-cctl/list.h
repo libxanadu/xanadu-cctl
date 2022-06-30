@@ -3,7 +3,6 @@
 
 #include <xanadu-cctl/header.h>
 
-
 XANADU_CXX_EXTERN_BEGIN
 
 
@@ -157,6 +156,5 @@ _XCCTLAPI_ xtl_list_iter_t __xcall__ xtl_list_erase(xtl_list_t _Object, xtl_list
 
 
 XANADU_CXX_EXTERN_END
-
 
 #endif

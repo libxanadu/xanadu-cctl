@@ -3,7 +3,6 @@
 
 #include <xanadu-cctl/header.h>
 
-
 XANADU_CXX_EXTERN_BEGIN
 
 
@@ -18,7 +17,8 @@ typedef enum xtl_container_type
 	XTL_CONTAINER_SET			= 5,
 	XTL_CONTAINER_STACK			= 6,
 	XTL_CONTAINER_VECTOR			= 7,
-	XTL_CONTAINER_UNKNOWN			= 8
+	XTL_CONTAINER_STRING			= 8,
+	XTL_CONTAINER_UNKNOWN			= 9
 }xtl_container_type;
 
 
@@ -46,6 +46,5 @@ _XCCTLAPI_ xtl_size_t __xcall__ xtl_allocator_max_size();
 
 
 XANADU_CXX_EXTERN_END
-
 
 #endif

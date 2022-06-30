@@ -40,6 +40,8 @@ _XCCTLAPI_ bool xtl_algorithm_sort(void* _Container, xtl_algorithm_sort_cb_t _Ca
 			break;
 		case XTL_CONTAINER_VECTOR:
 			break;
+		case XTL_CONTAINER_STRING:
+			break;
 		default:
 			return false;
 	}

@@ -286,7 +286,12 @@ _XCCTLAPI_ xtl_vector_iter_t __xcall__ xtl_vector_erase(xtl_vector_t _Object, xt
 	xtl_size_t 		full_size = _Object->size * _Object->elem_size;
 	char*			iter_data = (char*)_Iterator;
 
-	if(iter_data > (_Object->data + full_size - _Object->elem_size))
+	if(iter_data < _Object->data || (_Object->data + full_size - _Object->elem_size) < iter_data)
+	{
+		return xtl_vector_end(_Object);
+	}
+
+	if(iter_data == (_Object->data + full_size - _Object->elem_size))
 	{
 		x_posix_memset(iter_data, 0, _Object->elem_size);
 		--_Object->size;

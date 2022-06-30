@@ -3,7 +3,6 @@
 
 #include <xanadu-cctl/header.h>
 
-
 XANADU_CXX_EXTERN_BEGIN
 
 
@@ -37,6 +36,5 @@ _XCCTLAPI_ void __xcall__ xtl_algorithm_swap(void* _Object1, void* _Object2, xtl
 
 
 XANADU_CXX_EXTERN_END
-
 
 #endif

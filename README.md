@@ -13,6 +13,7 @@ This project uses pure C language to simulate some functions in the C++ standard
 
 ### Function
 ~~~
+json		: json with iterator
 array		: simulate std::array
 deque		: simulate std::deque
 list		: simulate std::list

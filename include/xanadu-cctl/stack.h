@@ -3,7 +3,6 @@
 
 #include <xanadu-cctl/header.h>
 
-
 XANADU_CXX_EXTERN_BEGIN
 
 
@@ -88,6 +87,5 @@ _XCCTLAPI_ void* __xcall__ xtl_stack_top(xtl_stack_t _Object);
 
 
 XANADU_CXX_EXTERN_END
-
 
 #endif
